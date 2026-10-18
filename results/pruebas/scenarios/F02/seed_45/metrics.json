@@ -1,0 +1,22 @@
+{
+  "transactions": 10000,
+  "fraud": 10,
+  "legit": 9990,
+  "actions": {
+    "APPROVE": 9985,
+    "ESCALATE": 8,
+    "BLOCK": 7
+  },
+  "recall_flagged": 0.7,
+  "recall_declined_final": 0.7,
+  "fpr_blocked": 0.0,
+  "fpr_flagged": 0.0008008008008008008,
+  "fpr_declined_final": 0.0,
+  "total_cost_agent": 148.51,
+  "total_cost_approve_all": 2968.7599999999998,
+  "retrains": 3,
+  "blacklist_size": 0,
+  "cases_opened": 8,
+  "run_dir": "results\\pruebas\\scenarios\\F02\\seed_45",
+  "elapsed_s": 126.3
+}

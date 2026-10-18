@@ -1,0 +1,187 @@
+{
+  "measures": [
+    {
+      "key": "recall_flagged",
+      "label": "Recall (sensibilidad)",
+      "formula": "fraudes marcados (bloqueados o escalados) / fraudes totales",
+      "op": ">=",
+      "threshold": 0.8,
+      "official": true
+    },
+    {
+      "key": "fpr_flagged",
+      "label": "Tasa de falsos positivos",
+      "formula": "legítimas marcadas (bloqueadas o escaladas) / legítimas totales",
+      "op": "<",
+      "threshold": 0.05,
+      "official": true
+    },
+    {
+      "key": "recall_declined_final",
+      "label": "Recall final (complementaria)",
+      "formula": "fraudes finalmente rechazados / fraudes totales",
+      "op": ">=",
+      "threshold": 0.8,
+      "official": false
+    },
+    {
+      "key": "fpr_declined_final",
+      "label": "Falsos positivos finales (complementaria)",
+      "formula": "legítimas finalmente rechazadas / legítimas totales",
+      "op": "<",
+      "threshold": 0.05,
+      "official": false
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "N01",
+      "kind": "normal",
+      "name": "Línea base",
+      "description": "Parámetros por defecto del agente y del simulador.",
+      "env": {},
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "N02",
+      "kind": "normal",
+      "name": "Analista con 90 % de acierto",
+      "description": "El analista humano se equivoca en 1 de cada 10 revisiones.",
+      "env": {
+        "analyst_accuracy": 0.9
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "N03",
+      "kind": "normal",
+      "name": "Sensores con 10 % de datos faltantes",
+      "description": "Cada sensor (dispositivo, país, comercio) deja de reportar en el 10 % de las transacciones.",
+      "env": {
+        "p_sensor_dropout": 0.1
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "L01",
+      "kind": "limite",
+      "name": "Defraudador sin señales de contexto",
+      "description": "El defraudador se comporta como un cliente legítimo en dispositivo, país, comercio y nivel de gasto; solo las variables V1 a V28 lo distinguen.",
+      "env": {
+        "p_fraud_new_device": 0.03,
+        "p_fraud_foreign_country": 0.05,
+        "p_fraud_same_tier": 0.9,
+        "p_fraud_preferred_category": 0.8
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "L02",
+      "kind": "limite",
+      "name": "Defraudador con señales débiles",
+      "description": "El defraudador imita parcialmente el comportamiento habitual del cliente.",
+      "env": {
+        "p_fraud_new_device": 0.15,
+        "p_fraud_foreign_country": 0.15,
+        "p_fraud_same_tier": 0.5,
+        "p_fraud_preferred_category": 0.4
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "L03",
+      "kind": "limite",
+      "name": "Costo de fricción alto (F = 60)",
+      "description": "Bloquear a un cliente legítimo cuesta el triple que en la línea base.",
+      "env": {},
+      "agent": {},
+      "costs": {
+        "friction_cost": 60.0
+      }
+    },
+    {
+      "id": "L04",
+      "kind": "limite",
+      "name": "Costo de revisión bajo (R = 1)",
+      "description": "Escalar a un analista cuesta una quinta parte que en la línea base.",
+      "env": {},
+      "agent": {},
+      "costs": {
+        "review_cost": 1.0
+      }
+    },
+    {
+      "id": "L05",
+      "kind": "limite",
+      "name": "Sin reentrenamiento del modelo",
+      "description": "El modelo no se reentrena con los resultados confirmados (la lista negra sí se actualiza).",
+      "env": {},
+      "agent": {
+        "retrain_every": 1000000000
+      },
+      "costs": {}
+    },
+    {
+      "id": "L06",
+      "kind": "limite",
+      "name": "Confirmaciones muy tardías",
+      "description": "El resultado real llega 5.000 transacciones después de la decisión.",
+      "env": {},
+      "agent": {
+        "feedback_delay": 5000
+      },
+      "costs": {}
+    },
+    {
+      "id": "F01",
+      "kind": "falla",
+      "name": "Falla de sensores del 30 %",
+      "description": "Cada sensor (dispositivo, país, comercio) deja de reportar en el 30 % de las transacciones.",
+      "env": {
+        "p_sensor_dropout": 0.3
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "F02",
+      "kind": "falla",
+      "name": "Sensores de contexto caídos",
+      "description": "Ningún sensor de dispositivo, país o comercio entrega datos; el agente opera solo con V1 a V28 y el monto.",
+      "env": {
+        "p_sensor_dropout": 1.0
+      },
+      "agent": {},
+      "costs": {}
+    },
+    {
+      "id": "F03",
+      "kind": "falla",
+      "name": "Analista poco confiable (70 %)",
+      "description": "El analista humano acierta solo en el 70 % de las revisiones.",
+      "env": {
+        "analyst_accuracy": 0.7
+      },
+      "agent": {},
+      "costs": {}
+    }
+  ],
+  "repetitions": 5,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "data_source": {
+    "kind": "csv",
+    "path": "data/creditcard.csv"
+  },
+  "max_test": 10000
+}
