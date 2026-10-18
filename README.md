@@ -33,7 +33,7 @@ source .venv/bin/activate        # En Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Probado con Python 3.12, numpy 2.4, pandas 3.0 y scikit-learn 1.8.
+Probado con Python 3.14.6, numpy 2.5.4, pandas 3.0.6 y scikit-learn 1.9.1.
 
 ## Datos
 
