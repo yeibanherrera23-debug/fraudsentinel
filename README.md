@@ -19,8 +19,15 @@ fraudsentinel/
   run_simulation.py  Ejecución individual del agente
   experiments.py     Plan de pruebas: medidas, umbrales, escenarios y repeticiones
   run_tests.py       Ejecuta el plan de pruebas
+app.py               Aplicación web (Streamlit) para ejecutar el agente y ver sus decisiones
+requirements.txt     Dependencias (incluye Streamlit)
+data/
+  demo_sample.csv.gz Muestra del conjunto de datos usada por la aplicación desplegada
+results/pruebas/     Resultados del plan de pruebas (60 ejecuciones, tabla y registros)
 tools/
   analyze_run.py     Desglosa una ejecución (qué acción tomó el agente y qué resultado real tuvo)
+  analyze_missed.py  Lista los fraudes aprobados por el agente, con monto y probabilidad estimada
+  make_demo_sample.py Genera la muestra de la aplicación a partir de creditcard.csv
 ```
 
 ## Requisitos
@@ -33,7 +40,27 @@ source .venv/bin/activate        # En Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Probado con Python 3.14.6, numpy 2.5.4, pandas 3.0.6 y scikit-learn 1.9.1.
+Probado con Python 3.14.6, numpy 2.5.4, pandas 3.0.6, scikit-learn 1.9.1 y Streamlit 1.66.0.
+
+## Aplicación web
+
+Aplicación desplegada: <https://fraudsentinel-cnasp6j7avl2e9nkrundw6.streamlit.app/>
+
+Ejecución local:
+
+```bash
+python -m streamlit run app.py
+```
+
+Uso: elegir un escenario en la barra lateral (N01–N03 normales, L01–L06 límite, F01–F03 de falla),
+fijar el número de transacciones y la semilla, y pulsar el botón de ejecución. La aplicación
+muestra las métricas, la comparación de cada medida contra su umbral, la tabla de decisiones
+(con filtros) y las primeras líneas del registro de eventos. La pestaña "Pruebas" presenta la
+tabla de resultados del plan de pruebas.
+
+La aplicación usa `data/demo_sample.csv.gz` (todos los fraudes del conjunto original más 40.000
+transacciones legítimas al azar), por lo que sus cifras no son idénticas a las del conjunto
+completo.
 
 ## Datos
 
