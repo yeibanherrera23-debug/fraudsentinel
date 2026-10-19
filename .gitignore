@@ -6,3 +6,6 @@ logs/*
 !logs/.gitkeep
 !data/.gitkeep
 results/
+
+.agents/
+.claude/
